@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 //const fs = require('fs');
 const scheduler = require('./src/scheduler');
@@ -5,6 +8,7 @@ const scheduler = require('./src/scheduler');
 
 var port = process.env.PORT;
 const app = express();
+var sendOnFirstRun = process.env.NODE_ENV === 'production' ? true : false;
 
 // app.get('/ping', async(req, res) => {
 //   let worldState = await api.getWorldState();
@@ -42,7 +46,7 @@ app.get('/ping', async (req, res) => {
   res.send({result: 'OK'});
 })
 
-scheduler.runCetusCycle();
+scheduler.runCetusCycle(sendOnFirstRun);
 
 app.listen(port, () => console.log(`listening on http://localhost:${port}`));
 

@@ -1,0 +1,30 @@
+version: "3"
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: yaws-notification
+    container_name: yaws-notification
+    working_dir: /usr/src/app
+    env_file: .env
+    environment:
+      - NODE_ENV=production
+      - WF_PLATFORM=$WF_PLATFORM
+      - WF_DB_PATH=$WF_DB_PATH
+      - PORT=$PORT
+      - FIREBASE_DATABASE_URL=$FIREBASE_DATABASE_URL
+      - PROJECT_ID=$PROJECT_ID
+      - PRIVATE_KEY_ID=$PRIVATE_KEY_ID
+      - PRIVATE_KEY=$PRIVATE_KEY
+      - CLIENT_EMAIL=$CLIENT_EMAIL
+      - CLIENT_ID=$CLIENT_ID
+      - CLIENT_X509_CERT_URL=$CLIENT_X509_CERT_URL
+    ports:
+      - "3031:3032"
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/usr/src/app/node_modules
+
+volumes:
+  node_modules:

@@ -1,9 +1,7 @@
 const sqlite3 = require('sqlite3');
-const dotenv = require('dotenv');
-dotenv.config();
 
 
-const db = new sqlite3.Database(process.env.PC_DATABASE, (err) => {
+const db = new sqlite3.Database(process.env.WF_DB_PATH, (err) => {
   if (err) {
     console.error(err.message);
   }
