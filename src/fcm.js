@@ -37,9 +37,6 @@ function send(options) {
     condition: condition
   };
 
-  console.log('Sending FCM: ');
-  console.log(message);
-
   return new Promise((resolve, reject) => {
     admin.messaging().send(message)
     .then((response) => {

@@ -7,7 +7,8 @@ const fcm = require('./fcm');
 
 async function runCetusCycle(skipFCM = false) {
   let now = moment();
-  console.log('Cetus Cycle Run Start: ' + now.format('LLL'));
+  console.log('Cetus Cycle Run Start: ' + now.format('DD MM YYYY hh:mm:ss'));
+  console.log('Skip FCM: ' + skipFCM);
   console.log('Fetching Cetus Cycle...');
   let cetusCycle = await api.getCetusCycle();
   console.log('Fetch Cetus Cycle complete');
@@ -24,7 +25,7 @@ async function runCetusCycle(skipFCM = false) {
       }
     });
 
-    schedule.scheduleJob(nextDate, runCetusCycle);
+    schedule.scheduleJob(nextDate, async() => await runCetusCycle());
   }
 }
 
@@ -38,15 +39,15 @@ function processStat(options) {
   let timeLeft = expiry.diff(current);
   if (timeLeft <= 0) {
     let reschedule = current.add(15, 's'); // rerun after 15s
-    console.log('Re-schedule Cetus Cycle on: ' + reschedule.format('LLL'));
+    console.log('Re-schedule Cetus Cycle on: ' + reschedule.format('DD MM YYYY hh:mm:ss'));
     return reschedule.toDate();
   }
 
   if (!options.skipFCM) {
+    console.log('Sending FCM...');
     fcm.send(options.notification).catch(err => console.error(err));
   }
-
-  console.log('Schedule Cetus Cycle on: ' + expiry.format('LLL'));
+  console.log('Schedule Cetus Cycle on: ' + expiry.format('DD MM YYYY hh:mm:ss'));
   return expiry.toDate();
 }
 
